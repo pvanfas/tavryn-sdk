@@ -1,0 +1,56 @@
+{
+  "name": "tavryn-sdk",
+  "version": "0.1.0",
+  "description": "Deterministic spending policy engine and idempotency key primitives for autonomous agents",
+  "author": "Tavryn (https://github.com/pvanfas/tavryn)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pvanfas/tavryn-sdk"
+  },
+  "keywords": [
+    "agent",
+    "ai-agent",
+    "spending-limits",
+    "policy-engine",
+    "deterministic",
+    "escrow",
+    "idempotency",
+    "usdc",
+    "circle",
+    "arc"
+  ],
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build && npm test"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.4",
+    "tsup": "^8.3.6",
+    "typescript": "^5.7.3",
+    "vitest": "^2.1.8"
+  }
+}
