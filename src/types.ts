@@ -1,4 +1,4 @@
-export interface Policy {
+export interface PolicyRule {
   id?: string;
   business_id?: string;
   max_auto_transaction: number;
@@ -8,12 +8,13 @@ export interface Policy {
   category_budgets?: Record<string, number> | null;
 }
 
-export type PolicyRule = Policy;
+/** @deprecated Use PolicyRule */
+export type Policy = PolicyRule;
 
 export type Action = "execute" | "negotiate" | "escrow" | "release" | string;
 
-export interface Context {
-  action?: Action;
+export interface PolicyContext {
+  action?: string;
   amount: number;
   savings?: number;
   category: string;
@@ -24,12 +25,14 @@ export interface Context {
   contractId?: string;
   vendor_id?: string;
   negotiationId?: string;
+  // Treasury runway & liquidity pre-check fields
   upcomingObligations30d?: number;
   daysUntilRenewal?: number;
   monthlyBurnRate?: number;
 }
 
-export type PolicyContext = Context;
+/** @deprecated Use PolicyContext */
+export type Context = PolicyContext;
 
 export type PolicyDecision = "approved" | "needs_human" | "rejected";
 
@@ -49,13 +52,15 @@ export interface RunwayAnalysis {
   recommendation: "execute_now" | "schedule_deferred" | "escalate_low_runway";
 }
 
-export interface PolicyResult {
+export interface PolicyEvaluation {
   decision: PolicyDecision;
   checks: PolicyCheckItem[];
   reasons: string[];
+  // Backwards compatibility properties
   approved: boolean;
   requiresHumanApproval: boolean;
   runwayAnalysis?: RunwayAnalysis;
 }
 
-export type PolicyEvaluation = PolicyResult;
+/** @deprecated Use PolicyEvaluation */
+export type PolicyResult = PolicyEvaluation;

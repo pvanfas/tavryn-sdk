@@ -1,10 +1,9 @@
 import {
-  Action,
-  Context,
-  Policy,
   PolicyCheckItem,
+  PolicyContext,
   PolicyDecision,
-  PolicyResult,
+  PolicyEvaluation,
+  PolicyRule,
   RunwayAnalysis,
 } from "./types";
 
@@ -16,21 +15,21 @@ import {
  * 2. checkPolicy(policy, context): PolicyResult
  */
 export function checkPolicy(
-  actionOrPolicy: Action | Policy,
-  policyOrContext: Policy | Context,
-  maybeContext?: Context,
-): PolicyResult {
-  let _action: Action = "execute";
-  let policy: Policy;
-  let context: Context;
+  actionOrPolicy: string | PolicyRule,
+  policyOrContext: PolicyRule | PolicyContext,
+  maybeContext?: PolicyContext,
+): PolicyEvaluation {
+  let _action = "execute";
+  let policy: PolicyRule;
+  let context: PolicyContext;
 
   if (typeof actionOrPolicy === "string") {
     _action = actionOrPolicy;
-    policy = policyOrContext as Policy;
+    policy = policyOrContext as PolicyRule;
     context = maybeContext || { amount: 0, category: "" };
   } else {
     policy = actionOrPolicy;
-    context = (policyOrContext as Context) || { amount: 0, category: "" };
+    context = (policyOrContext as PolicyContext) || { amount: 0, category: "" };
     _action = context.action || "execute";
   }
 
@@ -196,9 +195,8 @@ export function checkPolicy(
     const hasSufficientRunway = projectedLiquidity >= obligations30d;
 
     let recommendation:
-      | "execute_now"
-      | "schedule_deferred"
-      | "escalate_low_runway" = "execute_now";
+      "execute_now" | "schedule_deferred" | "escalate_low_runway" =
+      "execute_now";
 
     if (!hasSufficientRunway) {
       if (daysLeft > 7) {

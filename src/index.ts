@@ -4,6 +4,11 @@ export {
   computeEscrowIdempotencyKey,
   type IdempotencyFields,
 } from "./idempotency";
+export {
+  canonicalizeDecisionPayload,
+  computeEscrowDecisionHash,
+  type EscrowDecisionInput,
+} from "./decision-hash";
 export type {
   Action,
   Context,
