@@ -44,9 +44,30 @@ const key = computeIdempotencyKey({
 });
 ```
 
+### On-Chain Escrow Decision Hashing
+
+Commit cryptographic decision digests directly into smart contracts (e.g. `ArcEscrow.sol`) before funds move:
+
+```typescript
+import { computeEscrowDecisionHash } from "tavryn-sdk";
+
+const decisionHash = computeEscrowDecisionHash({
+  businessId: "biz_01HXYZ",
+  contractId: "contract_456",
+  negotiationId: "neg_789",
+  vendorWallet: "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+  amount: 1400,
+  baselinePrice: 2000,
+  category: "software",
+  policyDecision: "approved",
+  reviewerVerdict: "AGREE",
+});
+// => 0x32-byte keccak256 hash
+```
+
 ## API Reference
 
-### `checkPolicy(action, policy, context): PolicyResult`
+### `checkPolicy(action, policy, context): PolicyEvaluation`
 
 Evaluates a proposed action against spending rules and treasury state:
 
@@ -62,6 +83,10 @@ Returns `decision`: `"approved" | "needs_human" | "rejected"`, along with detail
 
 Computes a deterministic, collision-resistant SHA-256 hex key for transaction tracking:
 `sha256(businessId | contractId | negotiationId | amount)`
+
+### `computeEscrowDecisionHash(input): Hex`
+
+Computes the `keccak256` hash of byte-exact canonical decision JSON (strictly sorted keys, 6-decimal USDC precision, and normalized address). Used for on-chain replay protection in `ArcEscrow.sol`.
 
 ## License
 
